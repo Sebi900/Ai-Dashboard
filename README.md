@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Newspaper Moderation Dashboard (Prototype)
 
-## Getting Started
+This is a prototype of a **dashboard for moderators** that helps analyze and categorize comments from a database using AI. The project is built for a **university project** and utilizes modern web technologies such as **Next.js**, **Prisma**, and **Hugging Face** for AI-based text analysis.
 
-First, run the development server:
+## Tech Stack
+
+- **Next.js**: A powerful React framework for building full-stack applications.
+- **Prisma**: ORM for handling interactions with the database (comments are fetched and stored).
+- **Hugging Face**: Used for analyzing comments through **Large Language Models (LLM)** for categorization (e.g., spam, toxic, constructive).
+- **Tailwind CSS**: A utility-first CSS framework for fast styling.
+- **React**: JavaScript library for building user interfaces.
+- **Axios**: Used for making HTTP requests to the Hugging Face API.
+
+## Features
+
+- Fetches comments from a **Prisma-powered database**.
+- Analyzes comments using **Hugging Face models** to categorize them as **spam**, **toxic**, or **constructive**.
+- Allows the moderator to approve, reject, or forward comments directly within the dashboard.
+- Includes a sidebar with filters to view comments by category or status.
+
+## Setup & Installation
+
+To run the project locally, follow these steps:
+
+### 1. Clone the repository:
+
+```bash
+git clone https://github.com/Sebi900/Ai-Dashboard.git
+cd Ai-Dashboard
+```
+
+2. Install dependencies:
+   Run the following command to install all required dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+   Create a .env file in the root directory and add your environment variables (e.g., Hugging Face API key and database connection URL). Example .env:
+
+```env
+DATABASE_URL="your_prisma_database_connection_url"
+HUGGING_FACE_API_KEY="your_hugging_face_api_key"
+```
+
+4. Set up Prisma:
+   To run Prisma locally, follow these steps:
+
+Install Prisma CLI (if you don't have it already):
+
+```bash
+npm install prisma --save-dev
+```
+
+Generate Prisma client from your schema:
+
+```bash
+npx prisma generate
+Run Prisma Migrations:
+```
+
+Run Prisma migrations to set up the database schema:
+
+```bash
+npx prisma migrate dev
+```
+
+5. Start Docker (if using Docker for the database):
+   If you are using Docker to manage your database, ensure that you have Docker installed and running on your machine.
+
+Start Docker container with your Prisma database setup. For example, if you're using a PostgreSQL database, use:
+
+```bash
+docker-compose up -d
+```
+
+Ensure you have a docker-compose.yml file with the necessary configurations for your database.
+
+6. Run the development server:
+   After setting up everything, you can start the application:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the app in development mode. Visit http://localhost:3000 in your browser to see the dashboard in action.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+On the dashboard, you can see a list of all comments, their categories (spam, toxic, constructive), and their status.
+Use the sidebar to filter the comments by category (spam, toxic, constructive) or status (approved, rejected, pending).
+You can also approve, reject, or forward the comments directly from the interface.
+Tech Details
+Prisma handles database interactions. Comments are stored in the database and fetched to be displayed in the dashboard.
+Hugging Face API is used to categorize comments. It uses pre-trained models like BART and DistilBERT to analyze text and classify them into categories.
+Next.js is used to build both the frontend and the backend, allowing the app to fetch data and render it dynamically.
+Tailwind CSS provides utility classes for styling, ensuring a responsive and clean layout.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contributing
+If you'd like to contribute to the project, feel free to fork the repository and create a pull request. Contributions are welcome!
