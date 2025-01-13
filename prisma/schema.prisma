@@ -1,0 +1,28 @@
+// This is your Prisma schema file.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Ensure your DATABASE_URL is set correctly in your .env file
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Article {
+  id              Int       @id @default(autoincrement()) // Auto-incrementing integer ID
+  title           String // Title of the article
+  content         String // Content of the article
+  commentsEnabled Boolean   @default(true) // Flag to enable/disable comments on an article
+  comments        Comment[] // One-to-many relation to comments
+}
+
+model Comment {
+  id        Int     @id @default(autoincrement()) // Auto-incrementing integer ID
+  articleId Int // Foreign key to associate with an article
+  content   String // Content of the comment
+  author    String // Author of the comment (could be username, etc.)
+  status    String  @default("pending") // Default status of the comment (could be "approved", "rejected", "pending")
+  category  String? // Optional category of the comment (could be used for tagging)
+  article   Article @relation(fields: [articleId], references: [id]) // Relation with Article
+}
