@@ -4,10 +4,10 @@ This is a prototype of a **dashboard for moderators** that helps analyze and cat
 
 ## Tech Stack
 
-- **Next.js**: A powerful React framework for building full-stack applications.
+- **Next.js**: A React framework for building full-stack applications.
 - **Prisma**: ORM for handling interactions with the database (comments are fetched and stored).
 - **Hugging Face**: Used for analyzing comments through **Large Language Models (LLM)** for categorization (e.g., spam, toxic, constructive).
-- **Tailwind CSS**: A utility-first CSS framework for fast styling.
+- **Tailwind CSS**: A utility-first CSS framework for styling.
 - **React**: JavaScript library for building user interfaces.
 - **Axios**: Used for making HTTP requests to the Hugging Face API.
 
