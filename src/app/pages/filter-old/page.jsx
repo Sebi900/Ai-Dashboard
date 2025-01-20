@@ -4,9 +4,6 @@ import { useState, useEffect } from "react";
 import Sidebar from "../../component/Sidebar";
 import { query } from "../../lib/bart";
 import SaveCategoriesButton from "../../component/SaveCategoriesButton";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-
 
 const FilterPage = () => {
   const [comments, setComments] = useState([]);
@@ -45,17 +42,12 @@ const FilterPage = () => {
           const data = {
             inputs: comment.content,
             parameters: {
-              candidate_labels: ["spam", "toxic", "constructive", "neutral"], 
+              candidate_labels: ["spam", "toxic", "constructive"],
             },
           };
 
           const analysisResult = await query(data);
           const highestScoreLabel = analysisResult.labels[0];
-          if (highestScoreLabel.score < 0.5) {
-            comment.category = "uncertain";  // Or "neutral"
-          } else {
-            comment.category = highestScoreLabel.label;
-          }
           comment.category = highestScoreLabel;
           return comment;
         })
@@ -110,7 +102,7 @@ const FilterPage = () => {
       {/* Main Content */}
       <div className="flex-1 min-h-screen bg-gray-100 p-8">
         <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-          {/* <h1 className="text-3xl font-bold text-gray-800 mb-4">Comments List</h1> */}
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Comments List</h1>
 
           {loading && (
             <div className="flex justify-center items-center space-x-2">
@@ -121,63 +113,56 @@ const FilterPage = () => {
 
           {error && <p className="text-red-500">{error}</p>}
 
-          <ul className="space-y-6 mt-6">
-  {filteredComments.map((comment) => (
-    <li
-      key={comment.id}
-      className="p-5 border border-gray-300 bg-gray-100 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out bg-white"
-    >
+          <ul className="space-y-4 mt-6">
+            {filteredComments.map((comment) => (
+              <li
+                key={comment.id}
+                className="p-4 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition duration-200"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-lg font-semibold text-gray-700">{comment.author}</p>
+                  <span
+                    className={`px-3 py-1 text-sm rounded-full ${
+                      comment.category === "spam"
+                        ? "bg-red-500 text-white"
+                        : comment.category === "toxic"
+                        ? "bg-yellow-500 text-white"
+                        : comment.category === "constructive"
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-300 text-gray-700"
+                    }`}
+                  >
+                    {comment.category || "Not Categorized Yet"}
+                  </span>
+                </div>
+                <p className="text-gray-600">{comment.content}</p>
 
-      <div
-        className="flex justify-between items-center mb-4 px-1 rounded-t-lg"
-      >
-        <p className="text-lg font-semibold">{comment.author}</p>
-        <span
-          className={`px-4 py-2 text-sm font-medium rounded-full ${
-            comment.category === "spam"
-              ? "bg-red-500 text-white"
-              : comment.category === "toxic"
-              ? "bg-yellow-500 text-white"
-              : comment.category === "constructive"
-              ? "bg-green-500 text-white"
-              : "bg-gray-300 text-gray-800"
-          }`}
-        >
-          {comment.category || "Not Categorized Yet"}
-        </span>
-      </div>
-
-      <p className="text-gray-700 text-base">{comment.content}</p>
-
-      {/* Action Buttons with FontAwesome Icons */}
-      <div className="mt-6 flex space-x-3">
-        <button
-          onClick={() => updateStatus(comment.id, "approved")}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-200 flex items-center space-x-2"
-        >
-          <FontAwesomeIcon icon={faCheck} className="h-5 w-5" />
-          <span className="sr-only">Approve</span>
-        </button>
-        <button
-          onClick={() => updateStatus(comment.id, "rejected")}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-200 flex items-center space-x-2"
-        >
-          <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
-          <span className="sr-only">Reject</span>
-        </button>
-        <button
-          onClick={() => updateStatus(comment.id, "pending")}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-200 flex items-center space-x-2"
-        >
-          <FontAwesomeIcon icon={faArrowRight} className="h-5 w-5" />
-          <span className="sr-only">Forward</span>
-        </button>
-      </div>
-    </li>
-  ))}
-</ul>
+                {/* Action Buttons */}
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    onClick={() => updateStatus(comment.id, "approved")}
+                    className="px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => updateStatus(comment.id, "rejected")}
+                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  >
+                    Reject
+                  </button>
+                  <button
+                    onClick={() => updateStatus(comment.id, "pending")}
+                    className="px-3 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
+                  >
+                    Forward
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
                {/* Add SaveCategoriesButton here */}
-               <div className="mt-6">
+        <div className="mt-6">
           <SaveCategoriesButton comments={comments} />
         </div>
         </div>
